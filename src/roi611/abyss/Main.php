@@ -11,6 +11,8 @@ use pocketmine\utils\Config;
     
 class Main extends PluginBase implements Listener{
     
+    private Config $config;
+
     public function onEnable():void {
 
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
@@ -24,14 +26,14 @@ class Main extends PluginBase implements Listener{
         $player = $event->getPlayer();
         $world = $player->getWorld();
         $name = $world->getFolderName();
-        $pos = $this->config->get($name,null);
-        if($pos !== null){
+        $pos = $this->config->get($name, false);
+        if($pos !== false){
 
-            $data = explode(",",$pos);
+            $data = explode(",", $pos);
             $pos = $player->getPosition();
             $y = $pos->y;
             if((int)$data[0] >= $y){
-                $p = new Position($pos->x,(int)$data[1],$pos->z,$world);
+                $p = new Position($pos->x, (int)$data[1], $pos->z, $world);
                 $player->teleport($p);
                 $player->sendTip("[§4AvoidAbyss§r]\n対象の高さになったためテレポートしました");
             }
@@ -41,3 +43,5 @@ class Main extends PluginBase implements Listener{
     }
         
 }
+
+?>
